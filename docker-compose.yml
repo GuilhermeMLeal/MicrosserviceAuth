@@ -1,0 +1,29 @@
+services:
+  database:
+    container_name: database
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: offeringweb
+    ports:
+      - "5432:5432"
+    networks:
+      - backend-network
+
+  backend:
+    container_name: web-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: spring_boot_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
