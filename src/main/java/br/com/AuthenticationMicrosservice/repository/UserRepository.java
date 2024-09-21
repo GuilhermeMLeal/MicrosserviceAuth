@@ -2,9 +2,10 @@ package br.com.AuthenticationMicrosservice.repository;
 
 import br.com.AuthenticationMicrosservice.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.UUID;
+import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByEmail(String email);
+
 }

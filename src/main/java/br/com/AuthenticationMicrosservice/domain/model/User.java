@@ -21,19 +21,22 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "FIRST_NAME", length = 100)
+    @Column(name = "FIRST_NAME", length = 100, nullable = false)
     private String firstName;
-    @Column(name = "LAST_NAME", length = 100)
+    @Column(name = "LAST_NAME", length = 100, nullable = false)
     private String lastName;
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", nullable = false)
     private String email;
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
-    @Column(name = "IS_ACTIVE")
+    @Column(name = "IS_ACTIVE", nullable = false, columnDefinition = "boolean default true")
     private Boolean isActive;
+    @Column(name = "USER_ROLES", nullable = false)
     private UserRoles role;
 
-    public User(String email, String password, UserRoles role){
+    public User(String firstName, String lastName, String email, String password, UserRoles role){
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.role = role;
