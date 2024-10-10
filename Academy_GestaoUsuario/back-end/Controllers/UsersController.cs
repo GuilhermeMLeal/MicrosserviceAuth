@@ -16,14 +16,12 @@ namespace back_end.Controllers
             _context = context;
         }
 
-        // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
         }
 
-        // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Users>> GetUser(int id)
         {
@@ -37,21 +35,19 @@ namespace back_end.Controllers
             return user;
         }
 
-        // POST: api/Users
         [HttpPost]
         public async Task<ActionResult<Users>> CreateUser(Users user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            return CreatedAtAction(nameof(GetUser), new { id = user.Role_Id }, user);
         }
 
-        // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, Users user)
         {
-            if (id != user.Id)
+            if (id != user.Role_Id)
             {
                 return BadRequest();
             }
@@ -77,7 +73,6 @@ namespace back_end.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -95,7 +90,7 @@ namespace back_end.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.Role_Id == id);
         }
     }
 }

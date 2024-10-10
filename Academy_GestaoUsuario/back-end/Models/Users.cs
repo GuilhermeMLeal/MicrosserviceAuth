@@ -4,6 +4,9 @@ namespace back_end.Models
 {
     public class Users
     {
+        [Key]
+        public int Role_Id { get; set; }
+
         [Required(ErrorMessage = "O nome é obrigatório.")]
         [StringLength(255, ErrorMessage = "O nome deve ter no máximo 255 caracteres.")]
         public required string Name { get; set; }
