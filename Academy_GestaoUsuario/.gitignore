@@ -1,0 +1,4 @@
+.vs/
+back-end/bin/
+back-end/obj/
+back-end/obj/back-end.csproj.nuget.g.props
