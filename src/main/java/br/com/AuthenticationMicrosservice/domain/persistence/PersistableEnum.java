@@ -1,4 +1,5 @@
-package br.com.AuthenticationMicrosservice.persistence;
+package br.com.AuthenticationMicrosservice.domain.persistence;
 
-public class PersistableEnum {
+public interface PersistableEnum<T> {
+    T getCode();
 }
