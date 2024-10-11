@@ -1,29 +1,39 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
 namespace back_end.Models
 {
-    public class Users
+    public class User
     {
         [Key]
-        public int Role_Id { get; set; }
+        [Column("user_id")]
+        public int UserId { get; set; }
 
-        [Required(ErrorMessage = "O nome é obrigatório.")]
-        [StringLength(255, ErrorMessage = "O nome deve ter no máximo 255 caracteres.")]
-        public required string Name { get; set; }
+        [Column("role_id")]
+        public int RoleId { get; set; }
 
-        [Required(ErrorMessage = "O registro é obrigatório.")]
-        [StringLength(50, ErrorMessage = "O registro deve ter no máximo 50 caracteres.")]
-        public required string Registro { get; set; }
+        [Required]
+        [StringLength(255)]
+        [Column("name")]
+        public string Name { get; set; }
 
-        [StringLength(100, ErrorMessage = "O curso deve ter no máximo 100 caracteres.")]
-        public string? Course { get; set; }
+        [Required]
+        [EmailAddress]
+        [StringLength(255)]
+        [Column("email")]
+        public string Email { get; set; }
 
-        public int EntryYear { get; set; }
+        [Required]
+        [StringLength(255)]
+        [Column("password")]
+        public string Password { get; set; }
 
-        [StringLength(50, ErrorMessage = "A classe deve ter no máximo 50 caracteres.")]
-        public string? Class { get; set; }
+        [Column("creation_date")]
+        public DateTime CreationDate { get; set; } = DateTime.UtcNow;
 
-        [StringLength(50, ErrorMessage = "A classe deve ter no máximo 50 caracteres.")]
-        public DateOnly Birthday { get; set; }
+        [Column("isActive")]
+        public bool IsActive { get; set; } = true;
     }
 }
