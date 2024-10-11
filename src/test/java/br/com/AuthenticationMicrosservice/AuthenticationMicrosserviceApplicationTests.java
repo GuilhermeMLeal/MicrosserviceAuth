@@ -7,9 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class AuthenticationMicrosserviceApplicationTests {
-
-	@Mock
-	private UserRepository userRepository;
 	@Test
 	void contextLoads() {
 	}
