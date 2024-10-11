@@ -1,7 +1,10 @@
 package br.com.AuthenticationMicrosservice.domain.model;
 
 import br.com.AuthenticationMicrosservice.domain.enums.UserRoles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,16 +24,27 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "FIRST_NAME", length = 100, nullable = false)
+    @NotBlank(message = "First name cannot be blank")
     private String firstName;
+
     @Column(name = "LAST_NAME", length = 100, nullable = false)
+    @NotBlank(message = "Last name cannot be blank")
     private String lastName;
-    @Column(name = "EMAIL", nullable = false)
-    private String email;
+
     @Column(name = "PASSWORD", nullable = false)
+    @NotBlank(message = "Password cannot be blank")
+    @JsonIgnore
     private String password;
+
+    @Column(name = "EMAIL", nullable = false)
+    @Email
+    private String email;
+
     @Column(name = "IS_ACTIVE", nullable = false, columnDefinition = "boolean default true")
     private Boolean isActive;
+
     @Column(name = "USER_ROLES", nullable = false)
     private UserRoles role;
 
@@ -45,21 +59,17 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == UserRoles.ADMIN){
-            return List.of(
+        return switch (this.role) {
+            case ADMIN -> List.of(
                     new SimpleGrantedAuthority("ROLE_ADMIN"),
                     new SimpleGrantedAuthority("ROLE_COORDINATOR")
-                    );
-        } else if (this.role == UserRoles.COORDINATOR) {
-            return List.of(
+            );
+            case COORDINATOR -> List.of(
                     new SimpleGrantedAuthority("ROLE_COORDINATOR"),
                     new SimpleGrantedAuthority("ROLE_STUDENT")
             );
-        }else{
-            return List.of(
-                    new SimpleGrantedAuthority("ROLE_STUDENT")
-            );
-        }
+            default -> List.of(new SimpleGrantedAuthority("ROLE_STUDENT"));
+        };
     }
 
     @Override
