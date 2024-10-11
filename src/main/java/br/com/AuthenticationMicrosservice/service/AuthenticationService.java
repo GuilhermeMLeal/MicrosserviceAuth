@@ -5,7 +5,7 @@ import br.com.AuthenticationMicrosservice.domain.dto.TokenResponseDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AuthenticationService extends UserDetailsService {
-    public TokenResponseDto obterToken(AuthenticationLoginDto authDto);
-    public String validaTokenJwt(String token);
-    public TokenResponseDto obterRefreshToken(String refreshToken);
+    public TokenResponseDto obtainToken(AuthenticationLoginDto authDto);
+    public String validateJWT(String token);
+    public TokenResponseDto obtainRefreshToken(String refreshToken);
 }

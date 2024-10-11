@@ -16,25 +16,17 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private AuthenticationServiceImpl authenticationService;
+    private AuthenticationService authenticationService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public TokenResponseDto auth(@RequestBody AuthenticationLoginDto authDto) {
-
-        var userAutenticationToken = new UsernamePasswordAuthenticationToken(authDto.email(), authDto.password());
-
-        authenticationManager.authenticate(userAutenticationToken);
-
-        return authenticationService.obterToken(authDto);
+        return authenticationService.obtainToken(authDto);
     }
 
     @PostMapping("/refresh-token")
     @ResponseStatus(HttpStatus.OK)
     public TokenResponseDto authRefreshToken(@RequestBody RequestRefreshDto refreshToken) {
-        return authenticationService.obterRefreshToken(refreshToken.refreshToken());
+        return authenticationService.obtainRefreshToken(refreshToken.refreshToken());
     }
 }

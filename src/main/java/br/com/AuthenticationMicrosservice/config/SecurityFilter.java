@@ -19,10 +19,10 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    private AuthenticationService autenticacaoService;
+    private AuthenticationService authenticationService;
 
     @Autowired
-    private UserRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -31,32 +31,28 @@ public class SecurityFilter extends OncePerRequestFilter {
         String token = extraiTokenHeader(request);
 
         if (token != null) {
-            String login = autenticacaoService.validaTokenJwt(token);
-            User usuario = usuarioRepository.findByEmail(login);
+            try {
+                String email = authenticationService.validateJWT(token);
+                User usuario = userRepository.findByEmail(email);
 
-            if (usuario == null) {
-                throw  new RuntimeException("Unauthorizad");
+                if (usuario != null) {
+                    var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (RuntimeException e) {
             }
-
-            var autentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(autentication);
         }
-
         filterChain.doFilter(request, response);
     }
 
     public String extraiTokenHeader(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return null;
         }
 
-        if (!authHeader.split(" ")[0].equals("Bearer")) {
-            return  null;
-        }
-
-        return authHeader.split(" ")[1];
+        return authHeader.substring(7);
     }
 }
+
